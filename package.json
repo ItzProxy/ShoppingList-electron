@@ -1,0 +1,14 @@
+{
+  "name": "shoppinglist-electron",
+  "version": "1.0.0",
+  "description": "Shopping list desktop application ",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "author": "Dionne Pasion",
+  "license": "MIT",
+  "dependencies": {
+    "electron": "^4.0.0"
+  }
+}
