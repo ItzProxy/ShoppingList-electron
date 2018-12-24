@@ -1,0 +1,1 @@
+const windowManager = require('electron-window-manager');

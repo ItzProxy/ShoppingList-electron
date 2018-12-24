@@ -2,17 +2,20 @@ const electron = require('electron')
 const url = require('url')
 const path = require('path')
 
-const {app,BrowserWindow, Menu} = electron
+process.env.NODE_ENV = 'development';
+
+const {app,BrowserWindow, Menu, ipcMain } = electron
 
 let mainWindow;
 let addWindow;
+
 var aWidth = 1066, aHeight = 600, aFrame = true;
 
 app.on('ready',function(){
-    mainWindow = new BrowserWindow(
-        {   width: aWidth, 
-            height: aHeight, 
-            frame: aFrame
+    mainWindow = new BrowserWindow({   
+        width: aWidth, 
+        height: aHeight, 
+        frame: aFrame
     });
     mainWindow.on('closed', ()=>
     {
@@ -32,7 +35,6 @@ app.on('ready',function(){
 });
 
 //Handle creating add window
-
 function createAddWindow(){
     addWindow = new BrowserWindow(
         {   width: 300, 
@@ -53,6 +55,12 @@ function createAddWindow(){
     }));
 }
 
+//catch item:add
+ipcMain.on('item:add',(e,item)=>{
+    console.log(item);
+    mainWindow.webContents.send('item:add', item);
+    addWindow.close();
+});
 
 const mainMenuTemplate = [
     {
@@ -66,7 +74,10 @@ const mainMenuTemplate = [
                 }
             },
             {
-                label: 'Clear All Items'
+                label: 'Clear All Items',
+                click(){
+                    mainWindow.webContents.send('item:clear');
+                }
             },
             {
                 label: 'Quit',

@@ -1,9 +1,45 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+        <!-- Compiled and minified CSS -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+        <!-- Compiled and minified JavaScript -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
     <title>Shoppping List</title>
 </head>
 <body>
-    <h1>Shopping List</h1>
+    <nav>
+        <div class="nav-wrapper">
+            <a class="brand-logo center">Shopping List</a>
+        </div>
+    </nav>
+    <ul id='shopping-list'></ul>
+    <script>
+        const electron = require('electron')
+        const {ipcRenderer} = electron;
+        const shopList = document.querySelector('#shopping-list');
+        ipcRenderer.on('item:add',(e,item)=>{
+            shopList.className = "collection";
+            const li = document.createElement('li');
+            li.className = 'collection-item';
+            const itemText = document.createTextNode(item);
+            li.appendChild(itemText);
+            shopList.appendChild(li);
+        }); 
+        ipcRenderer.on('item:clear',(e)=>{
+            shopList.innerHTML = '';
+            if(shopList.children.length == 0){
+                shopList.className = '';
+            }
+        });
+        shopList.addEventListener('dblclick', removeItem);
+
+        function removeItem(e){
+            e.target.remove();
+            if(shopList.children.length == 0){
+                shopList.className = '';
+            }
+        }
+    </script>
 </body>
 </html>
